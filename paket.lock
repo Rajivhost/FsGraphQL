@@ -1,0 +1,14 @@
+
+
+GROUP Libraries
+RESTRICTION: || (== net472) (== netstandard2.0)
+NUGET
+  remote: https://api.nuget.org/v3/index.json
+    FParsec (1.0.3)
+      FSharp.Core (>= 4.0.0.1) - restriction: || (== net472) (&& (== netstandard2.0) (>= net40))
+      FSharp.Core (>= 4.2.3) - restriction: || (&& (== net472) (< net40)) (== netstandard2.0)
+      NETStandard.Library (>= 1.6.1) - restriction: || (&& (== net472) (< net40)) (== netstandard2.0)
+    FSharp.Core (4.3.4)
+    Microsoft.NETCore.Platforms (2.2.2) - restriction: || (&& (== net472) (< net40)) (&& (== net472) (>= netcoreapp2.0)) (&& (== net472) (< netstandard1.0) (>= win8)) (&& (== net472) (< netstandard1.3) (>= wpa81)) (&& (== net472) (>= uap10.0)) (&& (== net472) (>= wp8)) (== netstandard2.0)
+    NETStandard.Library (2.0.3) - restriction: || (&& (== net472) (< net40)) (== netstandard2.0)
+      Microsoft.NETCore.Platforms (>= 1.1)
