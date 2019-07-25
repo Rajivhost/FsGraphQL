@@ -2,5 +2,4 @@
 
 open Expecto
 
-let equals actual expected = 
-    Expect.equal actual expected (sprintf "Expected %A, but got %A." expected actual)
+let equals actual expected = Expect.equal actual expected "Unexpected value"

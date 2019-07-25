@@ -35,8 +35,8 @@ type ParserErrorException(error : ParserError) =
 module Parser =
     module internal Internal =
         let ignored = 
-            let whiteSpace = skipAnyOf [|'\u0009'; '\u000B'; '\u000C'; '\u0020'; '\u00A0'|]
-            let lineTerminators = skipAnyOf [|'\u000A'; '\u000D'; '\u2028'; '\u2029'|]
+            let whiteSpace = skipAnyOf [| '\u0009'; '\u000B'; '\u000C'; '\u0020'; '\u00A0' |]
+            let lineTerminators = skipAnyOf [| '\u000A'; '\u000D'; '\u2028'; '\u2029' |]
             let comments  = pchar '#' >>. skipManyTill anyChar (lineTerminators <|>  eof)
             let comma = skipChar ',' 
             whiteSpace <|> lineTerminators <|> comments <|> comma <?> "an ignored character."
@@ -88,7 +88,7 @@ module Parser =
                         (hex2int h3)*4096 + (hex2int h2)*256 + (hex2int h1)*16 + hex2int h0 |> char)
                 pchar '\\' >>. (escaped <|> unicode)
       
-            let normalCharacter = noneOf [|'\u000A';'\u000D';'\u2028';'\u2029';'"';'\''|]
+            let normalCharacter = noneOf [| '\u000A';'\u000D';'\u2028';'\u2029';'"';'\'' |]
             let quote =  pchar '"'
             between quote quote (manyChars (normalCharacter <|> escapedCharacter))
 
@@ -98,7 +98,7 @@ module Parser =
 
         let integerPart = 
             let negativeSign = pchar '-'
-            let nonZeroDigit = anyOf [|'1';'2';'3';'4';'5';'6';'7';'8';'9'|]
+            let nonZeroDigit = anyOf [| '1';'2';'3';'4';'5';'6';'7';'8';'9' |]
             let zero = pchar '0'
             let zeroInteger = opt negativeSign >>. zero >>% "0"
             let nonZeroInteger = 
