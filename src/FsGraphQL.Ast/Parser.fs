@@ -37,9 +37,9 @@ module Parser =
         let ignored = 
             let whiteSpace = skipAnyOf [|'\u0009'; '\u000B'; '\u000C'; '\u0020'; '\u00A0'|]
             let lineTerminators = skipAnyOf [|'\u000A'; '\u000D'; '\u2028'; '\u2029'|]
-            let comments  = pchar '#' >>. skipManyTill anyChar (lineTerminators <|>  eof) 
+            let comments  = pchar '#' >>. skipManyTill anyChar (lineTerminators <|>  eof)
             let comma = skipChar ',' 
-            whiteSpace <|> lineTerminators <|> comments <|> comma <?> "Ignored"
+            whiteSpace <|> lineTerminators <|> comments <|> comma <?> "an ignored character."
 
         let whiteSpaces = many ignored |>> ignore
 
@@ -131,48 +131,48 @@ module Parser =
         let variable = pchar '$' >>. name 
 
         let objectValue =
-            betweenCharsMany '{' '}' (pairBetween ':' name inputValue <?> "ObjectField") 
+            betweenCharsMany '{' '}' (pairBetween ':' name inputValue <?> "an object field.") 
             |>> (List.map (fun (name, value) -> { ObjectField.Name = name; Value = value }))
 
         let listValue =
-            betweenCharsMany '[' ']' (tokenWhiteSpaces inputValue <?> "Value") 
+            betweenCharsMany '[' ']' (tokenWhiteSpaces inputValue <?> "a value.") 
 
         inputValueRef :=
-            choice [ variable |>> Variable <?> "Variable"
-                     (attempt floatValue) |>> FloatValue <?> "Float"
-                     integerValue |>> IntValue <?> "Integer"
-                     stringValue |>> StringValue <?> "String"
-                     (attempt booleanValue) |>> BooleanValue <?> "Boolean"
+            choice [ variable |>> Variable <?> "a variable."
+                     (attempt floatValue) |>> FloatValue <?> "a float value."
+                     integerValue |>> IntValue <?> "an integer value."
+                     stringValue |>> StringValue <?> "a string value."
+                     (attempt booleanValue) |>> BooleanValue <?> "a boolean value."
                      nullValue
-                     enumValue |>> EnumValue  <?> "Enum"
-                     objectValue |>> ObjectValue  <?> "ObjectValue"
-                     listValue |>> ListValue <?> "ListValue" ]  
+                     enumValue |>> EnumValue  <?> "an enum value."
+                     objectValue |>> ObjectValue  <?> "an object value."
+                     listValue |>> ListValue <?> "a list value." ]  
 
         let arguments = 
             let argument = 
                 pairBetween ':' name inputValue
                 |>> fun (name, value) -> { Argument.Name = name; Value = value } 
-                <?> "Argument"
-            betweenCharsMany '(' ')' argument <?> "Arguments"
+                <?> "an argument."
+            betweenCharsMany '(' ')' argument <?> "arguments."
 
         let directives = 
             let directive =
                 pchar '@' >>. (name .>> whiteSpaces) .>>. (opt arguments) 
                 |>> fun (name, args) -> { Directive.Name = name; Arguments = someOrEmpty args}
-                <?> "Directive"
-            sepEndBy directive whiteSpaces <?> "Directives"
+                <?> "a directive."
+            sepEndBy directive whiteSpaces <?> "directives."
 
         let inputType, inputTypeRef = createParserForwardedToRef ()
     
-        let namedType = name |>> NamedType <?> "NamedType"
+        let namedType = name |>> NamedType <?> "a named type."
     
         let listType = 
             betweenChars '[' ']' inputType
-            |>> ListType  <?> "ListType"
+            |>> ListType  <?> "a list type."
     
         let nonNullType = 
             (listType <|> namedType) .>> pchar '!' 
-            |>> NonNullType <?> "NonNullType"
+            |>> NonNullType <?> "an non-null type."
     
         inputTypeRef := choice [ attempt nonNullType; namedType; listType ]
 
@@ -186,7 +186,7 @@ module Parser =
                 (fun oalias name oargs directives oselection ->
                     (Field { Alias = oalias; Name = name; Arguments = someOrEmpty oargs;
                              Directives = someOrEmpty directives; SelectionSet = match oselection with None -> [] | Some s -> s }))
-            <?> "Field"
+            <?> "a field."
 
         let selectionFragment =
             let inlineFragment =
@@ -195,17 +195,17 @@ module Parser =
                         { InlineFragment.Directives = someOrEmpty directives
                           SelectionSet = selectionSet 
                           TypeCondition = typeCondition })
-                |>> InlineFragment <?> "InlineFragment"
+                |>> InlineFragment <?> "an inline fragment."
             let fragmentSpread = 
                 tokenWhiteSpaces name .>>. opt directives
                 |>> fun (name, directives) -> { FragmentSpread.Name = name; Directives = someOrEmpty directives }
-                |>> FragmentSpread <?> "FragmentSpread"
+                |>> FragmentSpread <?> "a fragment spread."
 
-            pstring "..." .>> whiteSpaces >>. (inlineFragment <|> fragmentSpread)  <?> "Fragment"
+            pstring "..." .>> whiteSpaces >>. (inlineFragment <|> fragmentSpread)  <?> "a fragment."
 
-        selectionRef := field <|> selectionFragment  <?> "Selection"
+        selectionRef := field <|> selectionFragment  <?> "a selection."
 
-        selectionSetRef := betweenCharsMany1 '{' '}' selection <?> "SelectionSet"
+        selectionSetRef := betweenCharsMany1 '{' '}' selection <?> "a selection set."
 
         let executableDefinitions =
             let operationType = 

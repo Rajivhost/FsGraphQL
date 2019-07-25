@@ -1,4 +1,5 @@
 source https://api.nuget.org/v3/index.json
+nuget FSharp.Core
 
 group Libraries
     source https://api.nuget.org/v3/index.json
@@ -9,3 +10,10 @@ group Libraries
     nuget FSharp.Core 4.3.4
 
     nuget FParsec
+
+group UnitTests
+    source https://api.nuget.org/v3/index.json
+    frameworks: net472, netcoreapp2.2
+
+    nuget FSharp.Core
+    nuget Expecto
