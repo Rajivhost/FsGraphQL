@@ -42,6 +42,7 @@ Target.create "Build" (fun _ ->
 
 Target.create "Test" (fun _ ->
     !! "tests/**/bin/Release/*/*Tests.dll"
+    ++ "tests/**/bin/Release/*/*Tests.exe"
     |> Expecto.run id)
 
 let project = "FsGraphQL"
