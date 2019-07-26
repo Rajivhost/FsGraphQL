@@ -5,7 +5,7 @@ dist: xenial
 before_install:
   - chmod +x build.sh
 script:
-  ./build.sh
+  export FrameworkPathOverride=/usr/lib/mono/4.7.2-api/ ./build.sh
 global:
     - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
     - DOTNET_CLI_TELEMETRY_OPTOUT=1
