@@ -640,10 +640,7 @@ let tests =
                     |> queryShorthand
                 let expected =
                     documentWithDefinitions [ query; mutation; subscription; fragment; shorthand ]
-                parseAndAssert expected """# Copyright (c) 2015, Facebook, Inc.
-                    # All rights reserved.
-                
-                    query queryName($foo: ComplexType, $site: Site = MOBILE) @sequential {
+                parseAndAssert expected """query queryName($foo: ComplexType, $site: Site = MOBILE) @sequential {
                       whoever123is: node(id: [123, 456]) {
                         id ,
                         ... on User @defer {
